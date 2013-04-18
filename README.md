@@ -21,7 +21,7 @@ Pager Duty alerts if a metric reaches a warning or critical level.
 
 ## Requirements
 
-* PagerDury account
+* PagerDuty account
 * Graphite
 
 ## Notifiers
