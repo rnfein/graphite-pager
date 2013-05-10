@@ -30,7 +30,7 @@ class HipchatNotifier(object):
         if level == Level.NOMINAL and notified:
             _notify()
             self._storage.remove_lock_for_domain_and_key(domain, alert_key)
-        elif level in (Level.WARNING, Level.CRITICAL) and not notified:
+        elif level in (Level.WARNING, Level.CRITICAL, Level.NO_DATA) and not notified:
             _notify()
             self._storage.set_lock_for_domain_and_key(domain, alert_key)
 

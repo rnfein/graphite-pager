@@ -41,7 +41,7 @@ class Alert(object):
         try:
             value = record.get_last_value()
         except NoDataError:
-            return 'NO DATA', 'No data'
+            return Level.NO_DATA, 'No data'
         if self.comparison_operator(value, self.critical):
             return Level.CRITICAL, value
         elif self.comparison_operator(value, self.warning):
