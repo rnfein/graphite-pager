@@ -5,7 +5,6 @@ class NotifierProxy(object):
 
     def add_notifier(self, notifier):
         self._notifiers.append(notifier)
-        pass
 
     def notify(self, *args, **kwargs):
         for notifier in self._notifiers:
