@@ -9,7 +9,7 @@ def read(fname):
 def run_setup():
     setup(
         name='graphitepager',
-        version='0.0.7',
+        version='0.0.8',
         description='',
         keywords = '',
         url='http://github.com/philipcristiano/graphite-pager',
