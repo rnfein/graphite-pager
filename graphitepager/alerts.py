@@ -8,7 +8,6 @@ from level import Level
 class Alert(object):
 
     def __init__(self, alert_data, doc_url=None):
-        print alert_data
         self.name = alert_data['name']
         self.target = alert_data['target']
         self.warning = alert_data['warning']
