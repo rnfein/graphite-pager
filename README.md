@@ -62,7 +62,11 @@ Where the file `alerts.yml` is in the following format.
 
 # Configuration of Alerts
 
-Configuration of alerts is handled by a YAML file.
+Configuration of alerts is handled by a YAML file. This can be verified with
+
+    `graphite-pager verfify --config=config.yml`
+
+If it's invalid graphite-pager will likely crash.
 
 ## Documentation url
 

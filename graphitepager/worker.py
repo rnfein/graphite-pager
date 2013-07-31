@@ -20,23 +20,8 @@ from notifier_proxy import NotifierProxy
 from pagerduty_notifier import PagerdutyNotifier
 from redis_storage import RedisStorage
 
-
-STORAGE = RedisStorage(redis, os.getenv('REDISTOGO_URL'))
-
-pg_key = os.getenv('PAGERDUTY_KEY')
-pagerduty_client = PagerDuty(pg_key)
-
 GRAPHITE_URL = os.getenv('GRAPHITE_URL')
 
-notifier_proxy = NotifierProxy()
-notifier_proxy.add_notifier(
-    PagerdutyNotifier(pagerduty_client, STORAGE))
-
-
-if 'HIPCHAT_KEY' in os.environ:
-    hipchat = HipchatNotifier(HipChat(os.getenv('HIPCHAT_KEY')), STORAGE)
-    hipchat.add_room(os.getenv('HIPCHAT_ROOM'))
-    notifier_proxy.add_notifier(hipchat)
 
 ALERT_TEMPLATE = r"""{{level}} alert for {{alert.name}} {{record.target}}.  The
 current value is {{current_value}} which passes the {{threshold_level|lower}} value of
@@ -91,7 +76,7 @@ class Description(object):
             self.value,
         )
 
-def update_notifiers(alert, record):
+def update_notifiers(notifier_proxy, alert, record):
     alert_key = '{} {}'.format(alert.name, record.target)
 
     alert_level, value = alert.check_record(record)
@@ -103,18 +88,45 @@ def update_notifiers(alert, record):
 
     notifier_proxy.notify(alert_key, alert_level, description, html_description)
 
+def create_notifier_proxy():
+    STORAGE = RedisStorage(redis, os.getenv('REDISTOGO_URL'))
+
+    pg_key = os.getenv('PAGERDUTY_KEY')
+    pagerduty_client = PagerDuty(pg_key)
+
+
+    notifier_proxy = NotifierProxy()
+    notifier_proxy.add_notifier(
+        PagerdutyNotifier(pagerduty_client, STORAGE))
+
+
+    if 'HIPCHAT_KEY' in os.environ:
+        hipchat = HipchatNotifier(HipChat(os.getenv('HIPCHAT_KEY')), STORAGE)
+        hipchat.add_room(os.getenv('HIPCHAT_ROOM'))
+        notifier_proxy.add_notifier(hipchat)
+    return notifier_proxy
+
+
 
 def get_args_from_cli():
     parser = argparse.ArgumentParser(description='Run Graphite Pager')
     parser.add_argument('--config', metavar='config', type=str, nargs=1, default='alerts.yml', help='path to the config file')
+    parser.add_argument('command', nargs='?', choices=['run', 'verify'], default='run', help='What action to take')
 
     args = parser.parse_args()
     return args
 
+def load_alerts(location):
+    alerts = get_alerts(location)
+    return alerts
 
 def run():
     args = get_args_from_cli()
-    alerts = get_alerts(args.config[0])
+    alerts = load_alerts(args.config[0])
+    if 'verify'in args.command:
+        print 'Valid configuration, good job!'
+        return
+    notifier_proxy = create_notifier_proxy()
     while True:
         start_time = time.time()
         seen_alert_targets = set()
@@ -144,7 +156,7 @@ def run():
                 target = record.target
                 if (name, target) not in seen_alert_targets:
                     print 'Checking', (name, target)
-                    update_notifiers(alert, record)
+                    update_notifiers(notifier_proxy, alert, record)
                     seen_alert_targets.add((name, target))
                 else:
                     print 'Seen', (name, target)
