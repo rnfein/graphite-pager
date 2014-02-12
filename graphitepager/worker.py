@@ -7,6 +7,8 @@ import time
 from hipchat import HipChat
 from jinja2 import Template
 from pagerduty import PagerDuty
+from twilio.rest import TwilioRestClient
+
 import redis
 import requests
 import requests.exceptions
@@ -18,6 +20,7 @@ from hipchat_notifier import HipchatNotifier
 from level import Level
 from notifier_proxy import NotifierProxy
 from pagerduty_notifier import PagerdutyNotifier
+from twilio_notifier import TwilioNotifier
 from redis_storage import RedisStorage
 
 GRAPHITE_URL = os.getenv('GRAPHITE_URL')
@@ -95,18 +98,21 @@ def create_notifier_proxy():
     pg_key = os.getenv('PAGERDUTY_KEY')
     pagerduty_client = PagerDuty(pg_key)
 
-
     notifier_proxy = NotifierProxy()
     notifier_proxy.add_notifier(
         PagerdutyNotifier(pagerduty_client, STORAGE))
-
 
     if 'HIPCHAT_KEY' in os.environ:
         hipchat = HipchatNotifier(HipChat(os.getenv('HIPCHAT_KEY')), STORAGE)
         hipchat.add_room(os.getenv('HIPCHAT_ROOM'))
         notifier_proxy.add_notifier(hipchat)
-    return notifier_proxy
 
+    if 'TWILIO_ACCOUNT_SID' in os.environ and 'NOTIFY_PHONE_NUMBER' in os.environ:
+        client = TwilioRestClient(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+        twilio = TwilioNotifier(client, STORAGE)
+        notifier_proxy.add_notifier(twilio)
+
+    return notifier_proxy
 
 
 def get_args_from_cli():

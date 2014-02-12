@@ -29,9 +29,9 @@ Pager Duty alerts if a metric reaches a warning or critical level.
 Notifiers are what communicate with your preferred alerting service. Currently
 PagerDuty is required and HipChat is optional.
 
-PagerDuty requires an application key set in the environment as `PAGERDUTY_KEY`
-
-HipChat requires an application key `HIPCHAT_KEY` and the room to notify `HIPCHAT_ROOM`
+- PagerDuty: requires an application key set in the environment as `PAGERDUTY_KEY`
+- HipChat: requires an application key `HIPCHAT_KEY` and the room to notify `HIPCHAT_ROOM`
+- Twilio: requires the following application keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_OUTGOING_NUMBER`. Also uses the application key `NOTIFY_PHONE_NUMBER` for the `to` number on an sms
 
 More notifiers are easy to write, file an issue if there is something you would like!
 
