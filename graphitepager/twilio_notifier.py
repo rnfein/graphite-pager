@@ -9,6 +9,10 @@ class TwilioNotifier(object):
         self._storage = storage
 
     def notify(self, alert, alert_key, level, description, html_description):
+        phone_number = os.getenv('NOTIFY_PHONE_NUMBER')
+        if alert.get('phone_number', None) is not None:
+            phone_number = alert.get('phone_number', None)
+
         domain = 'Twilio'
         notified = self._storage.is_locked_for_domain_and_key(domain, alert_key)
         if level == Level.NOMINAL and notified:
@@ -16,7 +20,7 @@ class TwilioNotifier(object):
         elif level in (Level.WARNING, Level.CRITICAL, Level.NO_DATA) and not notified:
             description = str(description)
             self._client.sms.messages.create(
-                to=os.getenv('NOTIFY_PHONE_NUMBER'),
+                to=phone_number,
                 from_=os.getenv('TWILIO_OUTGOING_NUMBER'),
                 body=description,
             )
