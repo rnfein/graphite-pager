@@ -8,7 +8,7 @@ class TwilioNotifier(object):
         self._client = client
         self._storage = storage
 
-    def notify(self, alert_key, level, description, html_description):
+    def notify(self, alert, alert_key, level, description, html_description):
         domain = 'Twilio'
         notified = self._storage.is_locked_for_domain_and_key(domain, alert_key)
         if level == Level.NOMINAL and notified:

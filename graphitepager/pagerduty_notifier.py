@@ -7,7 +7,7 @@ class PagerdutyNotifier(object):
         self._client = client
         self._storage = storage
 
-    def notify(self, alert_key, level, description, html_description):
+    def notify(self, alert, alert_key, level, description, html_description):
         incident_key = self._storage.get_incident_key_for_alert_key(alert_key)
         if level != Level.NOMINAL:
             description = str(description)

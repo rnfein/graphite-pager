@@ -90,7 +90,8 @@ def update_notifiers(notifier_proxy, alert, record):
     if alert_level != Level.NOMINAL:
         print description
 
-    notifier_proxy.notify(alert_key, alert_level, description, html_description)
+    notifier_proxy.notify(alert, alert_key, alert_level, description, html_description)
+
 
 def create_notifier_proxy():
     STORAGE = RedisStorage(redis, os.getenv('REDISTOGO_URL'))
@@ -153,10 +154,11 @@ def run():
                 notification = 'Could not get target: {}'.format(target)
                 print notification
                 notifier_proxy.notify(
+                    alert,
                     target,
                     Level.CRITICAL,
                     notification,
-                    notification,
+                    notification
                 )
                 records = []
 
