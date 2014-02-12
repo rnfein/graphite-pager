@@ -1,6 +1,6 @@
 import operator
 
-from yaml import load, dump
+from yaml import load
 from graphite_data_record import NoDataError
 from level import Level
 

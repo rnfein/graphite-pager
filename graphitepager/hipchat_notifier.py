@@ -1,5 +1,5 @@
-import os
 from level import Level
+
 
 class HipchatNotifier(object):
 

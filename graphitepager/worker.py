@@ -76,6 +76,7 @@ class Description(object):
             self.value,
         )
 
+
 def update_notifiers(notifier_proxy, alert, record):
     alert_key = '{} {}'.format(alert.name, record.target)
 
@@ -116,14 +117,16 @@ def get_args_from_cli():
     args = parser.parse_args()
     return args
 
+
 def load_alerts(location):
     alerts = get_alerts(location)
     return alerts
 
+
 def run():
     args = get_args_from_cli()
     alerts = load_alerts(args.config[0])
-    if 'verify'in args.command:
+    if 'verify' in args.command:
         print 'Valid configuration, good job!'
         return
     notifier_proxy = create_notifier_proxy()
@@ -140,7 +143,7 @@ def run():
                    target,
                    from_=alert.from_,
                 )
-            except requests.exceptions.RequestException as exc:
+            except requests.exceptions.RequestException:
                 notification = 'Could not get target: {}'.format(target)
                 print notification
                 notifier_proxy.notify(
