@@ -18,13 +18,13 @@ class TwilioNotifier(BaseNotifier):
         if nominal:
             return
 
-        phone_number = os.getenv('NOTIFY_PHONE_NUMBER')
+        phone_number = os.environ.get('NOTIFY_PHONE_NUMBER', None)
         if alert.get('phone_number', None) is not None:
             phone_number = alert.get('phone_number', None)
 
         description = str(description)
         self._client.sms.messages.create(
             to=phone_number,
-            from_=os.getenv('TWILIO_OUTGOING_NUMBER'),
+            from_=os.environ.get('TWILIO_OUTGOING_NUMBER', None),
             body=description,
         )
