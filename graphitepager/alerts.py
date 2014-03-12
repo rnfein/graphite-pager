@@ -14,6 +14,7 @@ class Alert(object):
         self.critical = alert_data['critical']
         self.from_ = alert_data.get('from', '-1min')
         self.exclude = set(alert_data.get('exclude', []))
+        self.include = set(alert_data.get('include', []))
         self.alert_data = alert_data
 
         self.comparison_operator = self._determine_comparison_operator(self.warning, self.critical)
@@ -41,6 +42,11 @@ class Alert(object):
     def check_record(self, record):
         if record.target in self.exclude:
             return Level.NOMINAL, 'Excluded'
+
+        if self.include:
+            if record.target not in self.include:
+                return Level.NOMINAL, 'Not included'
+
         try:
             value = record.get_last_value()
         except NoDataError:

@@ -35,6 +35,14 @@ ALERT_WITH_EXCLUDE = {
     'exclude': ['exclude_1']
 }
 
+ALERT_WITH_INCLUDE = {
+    'target': 'TARGET',
+    'warning': 1,
+    'critical': 2,
+    'name': 'NAME',
+    'include': ['include_1']
+}
+
 class _BaseTestCase(TestCase):
 
     def assert_check_value_returns_item_for_value(self, value, check_return):
@@ -162,6 +170,33 @@ class TestAlertisExcluded(_BaseTestCase):
         level, value = self.alert.check_record(Record())
         self.assertEqual(level, Level.NOMINAL)
         self.assertEqual(value, 'Excluded')
+
+class TestAlertisNotIncluded(_BaseTestCase):
+
+    def setUp(self):
+        self.alert = Alert(ALERT_WITH_INCLUDE)
+
+
+    def test_should_return_no_data(self):
+        class Record(object):
+            target = 'include_1'
+            def get_last_value(self):
+                raise NoDataError()
+
+        level, value = self.alert.check_record(Record())
+        self.assertEqual(level, Level.NO_DATA)
+        self.assertEqual(value, 'No data')
+
+    def test_should_return_not_included_for_no_data(self):
+        class Record(object):
+            target = 'exclude_1'
+            def get_last_value(self):
+                raise NoDataError()
+
+        level, value = self.alert.check_record(Record())
+        self.assertEqual(level, Level.NOMINAL)
+        self.assertEqual(value, 'Not included')
+
 
 class TestValueForLevel(_BaseTestCase):
 
