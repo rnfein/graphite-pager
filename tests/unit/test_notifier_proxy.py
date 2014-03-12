@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from mock import MagicMock
 
-from graphitepager.notifier_proxy import NotifierProxy
-from graphitepager.pagerduty_notifier import PagerdutyNotifier
+from graphitepager.notifiers.proxy import NotifierProxy
+from graphitepager.notifiers.pagerduty import PagerdutyNotifier
 
 
 class TestNotifierProxy(TestCase):

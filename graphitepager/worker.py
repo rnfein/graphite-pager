@@ -16,12 +16,13 @@ import requests.exceptions
 from alerts import get_alerts
 from graphite_data_record import GraphiteDataRecord
 from graphite_target import get_records
-from hipchat_notifier import HipchatNotifier
 from level import Level
-from notifier_proxy import NotifierProxy
-from pagerduty_notifier import PagerdutyNotifier
-from twilio_notifier import TwilioNotifier
 from redis_storage import RedisStorage
+
+from notifiers.proxy import NotifierProxy
+from notifiers.hipchat import HipchatNotifier
+from notifiers.pagerduty import PagerdutyNotifier
+from notifiers.twilio import TwilioNotifier
 
 GRAPHITE_URL = os.getenv('GRAPHITE_URL')
 

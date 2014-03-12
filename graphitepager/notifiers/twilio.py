@@ -1,4 +1,4 @@
-from level import Level
+from graphitepager.level import Level
 import os
 
 
