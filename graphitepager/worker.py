@@ -98,9 +98,8 @@ def create_notifier_proxy():
 
     for klass in [HipChatNotifier, PagerdutyNotifier, TwilioNotifier]:
         notifier = klass(STORAGE)
-        print notifier._domain
-        print notifier.enabled
         if notifier.enabled:
+            print 'Enabling {0}'.format(notifier._domain)
             notifier_proxy.add_notifier(notifier)
 
     return notifier_proxy
