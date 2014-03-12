@@ -12,7 +12,6 @@ class HipChatNotifier(BaseNotifier):
         self._rooms = set()
 
         self.enabled = all(x in os.environ for x in ['HIPCHAT_KEY', 'HIPCHAT_ROOM'])
-
         if self.enabled:
             self._client = HipChat(os.getenv('HIPCHAT_KEY'))
             self.add_room(os.getenv('HIPCHAT_ROOM'))
