@@ -1,27 +1,23 @@
-from graphitepager.level import Level
 import os
 
+from graphitepager.notifiers.base import BaseNotifier
 
-class TwilioNotifier(object):
+class TwilioNotifier(BaseNotifier):
 
     def __init__(self, client, storage):
-        self._client = client
-        self._storage = storage
+        super(TwilioNotifier, self).__init__(client, storage)
 
-    def notify(self, alert, alert_key, level, description, html_description):
+    def _notify(self, alert, level, description, html_description, nominal=None):
+        if nominal:
+            return
+
         phone_number = os.getenv('NOTIFY_PHONE_NUMBER')
         if alert.get('phone_number', None) is not None:
             phone_number = alert.get('phone_number', None)
 
-        domain = 'Twilio'
-        notified = self._storage.is_locked_for_domain_and_key(domain, alert_key)
-        if level == Level.NOMINAL and notified:
-            self._storage.remove_lock_for_domain_and_key(domain, alert_key)
-        elif level in (Level.WARNING, Level.CRITICAL, Level.NO_DATA) and not notified:
-            description = str(description)
-            self._client.sms.messages.create(
-                to=phone_number,
-                from_=os.getenv('TWILIO_OUTGOING_NUMBER'),
-                body=description,
-            )
-            self._storage.set_lock_for_domain_and_key(domain, alert_key)
+        description = str(description)
+        self._client.sms.messages.create(
+            to=phone_number,
+            from_=os.getenv('TWILIO_OUTGOING_NUMBER'),
+            body=description,
+        )

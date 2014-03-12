@@ -20,7 +20,7 @@ from level import Level
 from redis_storage import RedisStorage
 
 from notifiers.proxy import NotifierProxy
-from notifiers.hipchat import HipchatNotifier
+from notifiers.hipchat import HipChatNotifier
 from notifiers.pagerduty import PagerdutyNotifier
 from notifiers.twilio import TwilioNotifier
 
@@ -105,7 +105,7 @@ def create_notifier_proxy():
         PagerdutyNotifier(pagerduty_client, STORAGE))
 
     if 'HIPCHAT_KEY' in os.environ:
-        hipchat = HipchatNotifier(HipChat(os.getenv('HIPCHAT_KEY')), STORAGE)
+        hipchat = HipChatNotifier(HipChat(os.getenv('HIPCHAT_KEY')), STORAGE)
         hipchat.add_room(os.getenv('HIPCHAT_ROOM'))
         notifier_proxy.add_notifier(hipchat)
 
