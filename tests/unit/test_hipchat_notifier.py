@@ -4,7 +4,7 @@ from mock import patch, MagicMock
 from hipchat import HipChat
 
 
-from graphitepager.notifiers.hipchat import HipChatNotifier
+from graphitepager.notifiers.hipchat_notifier import HipChatNotifier
 from graphitepager.redis_storage import RedisStorage
 from graphitepager.alerts import Alert
 from graphitepager.level import Level

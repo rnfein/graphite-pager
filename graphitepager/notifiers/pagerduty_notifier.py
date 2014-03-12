@@ -1,5 +1,5 @@
 import os
-import pagerduty
+from pagerduty import PagerDuty
 
 from graphitepager.level import Level
 from graphitepager.notifiers.base import BaseNotifier
@@ -12,7 +12,7 @@ class PagerdutyNotifier(BaseNotifier):
 
         self.enabled = all(x in os.environ for x in ['PAGERDUTY_KEY'])
         if self.enabled:
-            self._client = pagerduty.PagerDuty(os.getenv('PAGERDUTY_KEY'))
+            self._client = PagerDuty(os.getenv('PAGERDUTY_KEY'))
 
     def notify(self, alert, alert_key, level, description, html_description):
         service_key = None

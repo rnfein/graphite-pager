@@ -1,4 +1,4 @@
-import hipchat
+from hipchat import HipChat
 import os
 
 from graphitepager.level import Level
@@ -12,8 +12,9 @@ class HipChatNotifier(BaseNotifier):
         self._rooms = set()
 
         self.enabled = all(x in os.environ for x in ['HIPCHAT_KEY', 'HIPCHAT_ROOM'])
+
         if self.enabled:
-            self._client = hipchat.HipChat(os.getenv('HIPCHAT_KEY'))
+            self._client = HipChat(os.getenv('HIPCHAT_KEY'))
             self.add_room(os.getenv('HIPCHAT_ROOM'))
 
     def _notify(self, alert, level, description, html_description, nominal=None):

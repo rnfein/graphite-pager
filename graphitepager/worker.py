@@ -17,9 +17,9 @@ from level import Level
 from redis_storage import RedisStorage
 
 from notifiers.proxy import NotifierProxy
-from notifiers.hipchat import HipChatNotifier
-from notifiers.pagerduty import PagerdutyNotifier
-from notifiers.twilio import TwilioNotifier
+from notifiers.hipchat_notifier import HipChatNotifier
+from notifiers.pagerduty_notifier import PagerdutyNotifier
+from notifiers.twilio_notifier import TwilioNotifier
 
 GRAPHITE_URL = os.getenv('GRAPHITE_URL')
 
@@ -92,11 +92,14 @@ def update_notifiers(notifier_proxy, alert, record):
 
 
 def create_notifier_proxy():
-    STORAGE = RedisStorage(redis, os.getenv('REDISTOGO_URL'))
+    redis_url = os.environ.get('REDIS_URL', os.environ.get('REDISTOGO_URL', 'redis://localhost:6379'))
+    STORAGE = RedisStorage(redis, redis_url)
     notifier_proxy = NotifierProxy()
 
     for klass in [HipChatNotifier, PagerdutyNotifier, TwilioNotifier]:
         notifier = klass(STORAGE)
+        print notifier._domain
+        print notifier.enabled
         if notifier.enabled:
             notifier_proxy.add_notifier(notifier)
 

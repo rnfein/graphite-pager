@@ -1,5 +1,5 @@
 import os
-import twilio
+from twilio.rest import TwilioRestClient
 
 from graphitepager.notifiers.base import BaseNotifier
 
@@ -12,7 +12,7 @@ class TwilioNotifier(BaseNotifier):
         if self.enabled:
             sid = os.getenv('TWILIO_ACCOUNT_SID')
             token = os.getenv('TWILIO_AUTH_TOKEN')
-            self._client = twilio.rest.TwilioRestClient(sid, token)
+            self._client = TwilioRestClient(sid, token)
 
     def _notify(self, alert, level, description, html_description, nominal=None):
         if nominal:
