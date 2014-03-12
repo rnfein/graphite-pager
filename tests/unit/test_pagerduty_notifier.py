@@ -18,6 +18,7 @@ class TestPagerduteryNotifier(TestCase):
         self.html_description = 'HTML ALERT DESCRIPTION'
         self.mock_redis_storage = MagicMock(RedisStorage)
         self.mock_pagerduty_client = MagicMock(PagerDuty)
+        self.mock_pagerduty_client.service_key = None
         self.mock_alert = MagicMock(Alert)
 
         self.pn = PagerdutyNotifier(self.mock_pagerduty_client, self.mock_redis_storage)
