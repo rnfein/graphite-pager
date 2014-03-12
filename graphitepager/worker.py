@@ -119,53 +119,78 @@ def load_alerts(location):
     return alerts
 
 
-def run():
-    args = get_args_from_cli()
+def verify(args):
+    load_alerts(args.config[0])
+    print 'Valid configuration, good job!'
+
+
+def run(args):
     alerts = load_alerts(args.config[0])
-    if 'verify' in args.command:
-        print 'Valid configuration, good job!'
-        return
     notifier_proxy = create_notifier_proxy()
     while True:
         start_time = time.time()
         seen_alert_targets = set()
         for alert in alerts:
-            target = alert.target
-            try:
-                records = get_records(
-                   GRAPHITE_URL,
-                   requests.get,
-                   GraphiteDataRecord,
-                   target,
-                   from_=alert.from_,
-                )
-            except requests.exceptions.RequestException:
-                notification = 'Could not get target: {}'.format(target)
-                print notification
-                notifier_proxy.notify(
-                    alert,
-                    target,
-                    Level.CRITICAL,
-                    notification,
-                    notification
-                )
-                records = []
+            records = retrieve_records(alert, notifier_proxy)
+            mark_seen(alert, records, seen_alert_targets, notifier_proxy)
 
-            for record in records:
-                name = alert.name
-                target = record.target
-                if (name, target) not in seen_alert_targets:
-                    print 'Checking', (name, target)
-                    update_notifiers(notifier_proxy, alert, record)
-                    seen_alert_targets.add((name, target))
-                else:
-                    print 'Seen', (name, target)
-        time_diff = time.time() - start_time
-        sleep_for = 60 - time_diff
-        if sleep_for > 0:
-            sleep_for = 60 - time_diff
-            print 'Sleeping for {0} seconds at'.format(sleep_for), datetime.datetime.utcnow()
-            time.sleep(60 - time_diff)
+        sleep_secs(start_time)
+
+
+def retrieve_records(alert, notifier_proxy):
+    try:
+        records = get_records(
+           GRAPHITE_URL,
+           requests.get,
+           GraphiteDataRecord,
+           alert.target,
+           from_=alert.from_,
+        )
+    except requests.exceptions.RequestException:
+        notification = 'Could not get target: {}'.format(alert.target)
+        print notification
+        notifier_proxy.notify(
+            alert,
+            alert.target,
+            Level.CRITICAL,
+            notification,
+            notification
+        )
+        records = []
+
+    return records
+
+
+def mark_seen(alert, records, seen_alert_targets, notifier_proxy):
+    for record in records:
+        name = alert.name
+        target = record.target
+        if (name, target) not in seen_alert_targets:
+            print 'Checking', (name, target)
+            update_notifiers(notifier_proxy, alert, record)
+            seen_alert_targets.add((name, target))
+        else:
+            print 'Seen', (name, target)
+
+
+def sleep_secs(start_time):
+    total_sleep = 60
+    time_diff = time.time() - start_time
+    sleep_for = total_sleep - time_diff
+    if sleep_for > 0:
+        sleep_for = total_sleep - time_diff
+        print 'Sleeping for {0} seconds at'.format(sleep_for), datetime.datetime.utcnow()
+        time.sleep(total_sleep - time_diff)
+
+
+def main():
+    args = get_args_from_cli()
+    if 'verify' in args.command:
+        return verify(args)
+
+    if 'run' in args.command:
+        return run(args)
+
 
 if __name__ == '__main__':
-    run()
+    main()

@@ -33,7 +33,7 @@ def run_setup():
         ],
         entry_points="""
         [console_scripts]
-        graphite-pager=graphitepager.worker:run
+        graphite-pager=graphitepager.worker:main
         """,
     )
 
