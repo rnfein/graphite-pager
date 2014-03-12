@@ -20,7 +20,8 @@ class TestHipChatNotifier(TestCase):
         self.mock_hipchat_client = MagicMock(HipChat)
         self.mock_alert = MagicMock(Alert)
 
-        self.hcn = HipChatNotifier(self.mock_hipchat_client, self.mock_redis_storage)
+        self.hcn = HipChatNotifier(self.mock_redis_storage)
+        self.hcn._client = self.mock_hipchat_client
 
     def test_should_not_notify_hipchat_if_no_rooms_have_been_added(self):
         self.hcn.notify(self.mock_alert, self.alert_key, Level.WARNING, self.description, self.html_description)

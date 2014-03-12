@@ -4,10 +4,7 @@ import datetime
 import os
 import time
 
-from hipchat import HipChat
 from jinja2 import Template
-from pagerduty import PagerDuty
-from twilio.rest import TwilioRestClient
 
 import redis
 import requests
@@ -96,23 +93,12 @@ def update_notifiers(notifier_proxy, alert, record):
 
 def create_notifier_proxy():
     STORAGE = RedisStorage(redis, os.getenv('REDISTOGO_URL'))
-
-    pg_key = os.getenv('PAGERDUTY_KEY')
-    pagerduty_client = PagerDuty(pg_key)
-
     notifier_proxy = NotifierProxy()
-    notifier_proxy.add_notifier(
-        PagerdutyNotifier(pagerduty_client, STORAGE))
 
-    if 'HIPCHAT_KEY' in os.environ:
-        hipchat = HipChatNotifier(HipChat(os.getenv('HIPCHAT_KEY')), STORAGE)
-        hipchat.add_room(os.getenv('HIPCHAT_ROOM'))
-        notifier_proxy.add_notifier(hipchat)
-
-    if 'TWILIO_ACCOUNT_SID' in os.environ and 'NOTIFY_PHONE_NUMBER' in os.environ:
-        client = TwilioRestClient(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
-        twilio = TwilioNotifier(client, STORAGE)
-        notifier_proxy.add_notifier(twilio)
+    for klass in [HipChatNotifier, PagerdutyNotifier, TwilioNotifier]:
+        notifier = klass(STORAGE)
+        if notifier.enabled:
+            notifier_proxy.add_notifier(notifier)
 
     return notifier_proxy
 

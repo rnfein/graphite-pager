@@ -1,12 +1,20 @@
+import hipchat
+import os
+
 from graphitepager.level import Level
 from graphitepager.notifiers.base import BaseNotifier
 
 
 class HipChatNotifier(BaseNotifier):
 
-    def __init__(self, client, storage):
-        super(HipChatNotifier, self).__init__(client, storage)
+    def __init__(self, storage):
+        super(HipChatNotifier, self).__init__(storage)
         self._rooms = set()
+
+        self.enabled = all(x in os.environ for x in ['HIPCHAT_KEY', 'HIPCHAT_ROOM'])
+        if self.enabled:
+            self._client = hipchat.HipChat(os.getenv('HIPCHAT_KEY'))
+            self.add_room(os.getenv('HIPCHAT_ROOM'))
 
     def _notify(self, alert, level, description, html_description, nominal=None):
         colors = {

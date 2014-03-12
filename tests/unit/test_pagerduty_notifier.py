@@ -21,7 +21,8 @@ class TestPagerduteryNotifier(TestCase):
         self.mock_pagerduty_client.service_key = None
         self.mock_alert = MagicMock(Alert)
 
-        self.pn = PagerdutyNotifier(self.mock_pagerduty_client, self.mock_redis_storage)
+        self.pn = PagerdutyNotifier(self.mock_redis_storage)
+        self.pn._client = self.mock_pagerduty_client
 
     def test_should_trigger_with_warning_level_and_key(self):
         incident_key = 'KEY'
