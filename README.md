@@ -49,6 +49,7 @@ All SMS notifiers use the environment variable `NOTIFY_PHONE_NUMBER` for the `to
 ### Mobile Push Notifications
 
 - Prowl: Requires an api key set in the environment as `PROWL_API_KEY`. You may also use `PROWL_PROVIDERKEY`, and may customize the application via `PROWL_APPLICATION`
+- Pushover: requires the following application keys: `PUSHOVER_TOKEN`.  `PUSHOVER_USER_KEY`.
 
 ### Custom
 
