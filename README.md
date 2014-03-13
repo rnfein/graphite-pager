@@ -24,37 +24,6 @@ Pager Duty alerts if a metric reaches a warning or critical level.
 * PagerDuty account
 * Graphite
 
-## Notifiers
-
-Notifiers are what communicate with your preferred alerting service. You enable notifiers by setting the proper environment variables.
-
-More notifiers are easy to write, file an issue if there is something you would like!
-
-### Chat
-
-- HipChat: requires an application key `HIPCHAT_KEY` and the room to notify `HIPCHAT_ROOM`
-
-### Incident Managers
-
-- PagerDuty: requires an application key set in the environment as `PAGERDUTY_KEY`
-
-### SMS
-
-All SMS notifiers use the environment variable `NOTIFY_PHONE_NUMBER` for the `to` number on an sms.
-
-- Clickatell: requires the following application keys: `CLICKATELL_USERNAME`, `CLICKATELL_PASSWORD`, `CLICKATELL_API_ID`, `CLICKATELL_OUTGOING_NUMBER`.
-- Nexmo: requires the following application keys: `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_OUTGOING_NUMBER`.
-- Twilio: requires the following application keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_OUTGOING_NUMBER`.
-
-### Mobile Push Notifications
-
-- Prowl: Requires an api key set in the environment as `PROWL_API_KEY`. You may also use `PROWL_PROVIDERKEY`, and may customize the application via `PROWL_APPLICATION`
-- Pushover: requires the following application keys: `PUSHOVER_TOKEN`.  `PUSHOVER_USER_KEY`.
-
-### Custom
-
-- Webhook: requires an webhook url endpoint set in the environment as `WEBHOOK_URL`
-
 ## Installation
 
 At the moment the easiest way to install Graphite-Pager is with Heroku! See
@@ -80,7 +49,7 @@ https://github.com/philipcristiano/graphite-pager-heroku-example.
 
 Where the file `alerts.yml` is in the following format.
 
-# Configuration of Alerts
+## Configuration of Alerts
 
 Configuration of alerts is handled by a YAML file. This can be verified with
 
@@ -88,13 +57,13 @@ Configuration of alerts is handled by a YAML file. This can be verified with
 
 If it's invalid graphite-pager will likely crash.
 
-## Documentation url
+### Documentation url
 
 An attribute of `docs\_uls` in the configuration will add a link to the
 documentation of the alert. Currently this is in the format of
 `{docs\_url}/{alert name}#{alert legend name}`
 
-## Alert Format
+### Alert Format
 
 Alerts have 4 required arguments and 2 optional arguments.
 
@@ -150,6 +119,40 @@ values
     will allow for the remaining metrics to be checked without alerting for
     worker nodes above 5
 
+## Notifiers
+
+Notifiers are what communicate with your preferred alerting service. You enable notifiers by setting the proper environment variables.
+
+More notifiers are easy to write, file an issue if there is something you would like!
+
+### Chat
+
+- HipChat: requires an application key `HIPCHAT_KEY` and the room to notify `HIPCHAT_ROOM`
+
+### Email
+
+No notifiers are available.
+
+### Incident Managers
+
+- PagerDuty: requires an application key set in the environment as `PAGERDUTY_KEY`
+
+### SMS
+
+All SMS notifiers use the environment variable `NOTIFY_PHONE_NUMBER` for the `to` number on an sms.
+
+- Clickatell: requires the following application keys: `CLICKATELL_USERNAME`, `CLICKATELL_PASSWORD`, `CLICKATELL_API_ID`, `CLICKATELL_OUTGOING_NUMBER`.
+- Nexmo: requires the following application keys: `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_OUTGOING_NUMBER`.
+- Twilio: requires the following application keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_OUTGOING_NUMBER`.
+
+### Mobile Push Notifications
+
+- Prowl: Requires an api key set in the environment as `PROWL_API_KEY`. You may also use `PROWL_PROVIDERKEY`, and may customize the application via `PROWL_APPLICATION`
+- Pushover: requires the following application keys: `PUSHOVER_TOKEN`.  `PUSHOVER_USER_KEY`.
+
+### Custom
+
+- Webhook: requires an webhook url endpoint set in the environment as `WEBHOOK_URL`
 
 ## TODO
 
