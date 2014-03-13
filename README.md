@@ -26,7 +26,9 @@ Pager Duty alerts if a metric reaches a warning or critical level.
 
 ## Notifiers
 
-Notifiers are what communicate with your preferred alerting service. You enable notifiers by setting the proper environment variables
+Notifiers are what communicate with your preferred alerting service. You enable notifiers by setting the proper environment variables.
+
+More notifiers are easy to write, file an issue if there is something you would like!
 
 ### Chat
 
@@ -44,11 +46,13 @@ All SMS notifiers use the environment variable `NOTIFY_PHONE_NUMBER` for the `to
 - Nexmo: requires the following application keys: `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_OUTGOING_NUMBER`.
 - Twilio: requires the following application keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_OUTGOING_NUMBER`.
 
+### Mobile Push Notifications
+
+- Prowl: Requires an api key set in the environment as `PROWL_API_KEY`. You may also use `PROWL_PROVIDERKEY`, and may customize the application via `PROWL_APPLICATION`
+
 ### Custom
 
 - Webhook: requires an webhook url endpoint set in the environment as `WEBHOOK_URL`
-
-More notifiers are easy to write, file an issue if there is something you would like!
 
 ## Installation
 
