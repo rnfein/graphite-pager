@@ -2,8 +2,8 @@ import json
 import os
 import requests
 
-
 from graphitepager.notifiers.base import BaseNotifier
+
 
 class WebhookNotifier(BaseNotifier):
 
