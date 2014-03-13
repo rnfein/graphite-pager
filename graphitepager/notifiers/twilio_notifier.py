@@ -13,18 +13,14 @@ class TwilioNotifier(BaseNotifier):
             sid = os.getenv('TWILIO_ACCOUNT_SID')
             token = os.getenv('TWILIO_AUTH_TOKEN')
             self._client = TwilioRestClient(sid, token)
+            self._phone_number = os.environ.get('NOTIFY_PHONE_NUMBER', None)
 
     def _notify(self, alert, level, description, html_description, nominal=None):
         if nominal:
             return
 
-        phone_number = os.environ.get('NOTIFY_PHONE_NUMBER', None)
-        if alert.get('phone_number', None) is not None:
-            phone_number = alert.get('phone_number', None)
-
-        description = str(description)
         self._client.sms.messages.create(
-            to=phone_number,
+            to=alert.get('phone_number', self._phone_number),
             from_=os.environ.get('TWILIO_OUTGOING_NUMBER', None),
-            body=description,
+            body=str(description),
         )
