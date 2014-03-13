@@ -28,6 +28,7 @@ class TestTwilioNotifier(TestCase):
 
         self.notifier = TwilioNotifier(self.mock_redis_storage)
         self.notifier._client = self.mock_twilio_client
+        self.notifier._phone_number = None
 
     def test_should_not_notify_if_warning_and_already_notified(self):
         self.mock_redis_storage.is_locked_for_domain_and_key.return_value = True
