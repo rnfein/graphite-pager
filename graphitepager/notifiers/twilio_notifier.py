@@ -3,12 +3,14 @@ from twilio.rest import TwilioRestClient
 
 from graphitepager.notifiers.base import BaseNotifier
 
+
 class TwilioNotifier(BaseNotifier):
 
     def __init__(self, storage):
         super(TwilioNotifier, self).__init__(storage)
 
-        self.enabled = all(x in os.environ for x in ['TWILIO_ACCOUNT_SID', 'NOTIFY_PHONE_NUMBER'])
+        required = ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_OUTGOING_NUMBER', 'NOTIFY_PHONE_NUMBER']
+        self.enabled = all(x in os.environ for x in required)
         if self.enabled:
             sid = os.getenv('TWILIO_ACCOUNT_SID')
             token = os.getenv('TWILIO_AUTH_TOKEN')
