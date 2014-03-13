@@ -41,6 +41,7 @@ Notifiers are what communicate with your preferred alerting service. You enable 
 All SMS notifiers use the environment variable `NOTIFY_PHONE_NUMBER` for the `to` number on an sms.
 
 - Clickatell: requires the following application keys: `CLICKATELL_USERNAME`, `CLICKATELL_PASSWORD`, `CLICKATELL_API_ID`, `CLICKATELL_OUTGOING_NUMBER`.
+- Nexmo: requires the following application keys: `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_OUTGOING_NUMBER`.
 - Twilio: requires the following application keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_OUTGOING_NUMBER`.
 
 ### Custom

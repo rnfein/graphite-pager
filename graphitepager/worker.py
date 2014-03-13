@@ -19,6 +19,7 @@ from redis_storage import RedisStorage
 from notifiers.proxy import NotifierProxy
 from notifiers.clickatell_notifier import ClickatellNotifier
 from notifiers.hipchat_notifier import HipChatNotifier
+from notifiers.nexmo_notifier import NexmoNotifier
 from notifiers.pagerduty_notifier import PagerdutyNotifier
 from notifiers.twilio_notifier import TwilioNotifier
 from notifiers.webhook_notifier import WebhookNotifier
@@ -98,7 +99,7 @@ def create_notifier_proxy():
     STORAGE = RedisStorage(redis, redis_url)
     notifier_proxy = NotifierProxy()
 
-    for klass in [ClickatellNotifier, HipChatNotifier, PagerdutyNotifier, TwilioNotifier, WebhookNotifier]:
+    for klass in [ClickatellNotifier, HipChatNotifier, NexmoNotifier, PagerdutyNotifier, TwilioNotifier, WebhookNotifier]:
         notifier = klass(STORAGE)
         if notifier.enabled:
             print 'Enabling {0}'.format(notifier._domain)
