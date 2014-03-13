@@ -31,6 +31,7 @@ PagerDuty is required and HipChat is optional.
 
 - PagerDuty: requires an application key set in the environment as `PAGERDUTY_KEY`
 - HipChat: requires an application key `HIPCHAT_KEY` and the room to notify `HIPCHAT_ROOM`
+- Webhook: requires an webhook url endpoint set in the environment as `WEBHOOK_URL`
 - Twilio: requires the following application keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_OUTGOING_NUMBER`. Also uses the application key `NOTIFY_PHONE_NUMBER` for the `to` number on an sms
 
 More notifiers are easy to write, file an issue if there is something you would like!

@@ -20,6 +20,7 @@ from notifiers.proxy import NotifierProxy
 from notifiers.hipchat_notifier import HipChatNotifier
 from notifiers.pagerduty_notifier import PagerdutyNotifier
 from notifiers.twilio_notifier import TwilioNotifier
+from notifiers.webhook_notifier import WebhookNotifier
 
 GRAPHITE_URL = os.getenv('GRAPHITE_URL')
 
@@ -96,7 +97,7 @@ def create_notifier_proxy():
     STORAGE = RedisStorage(redis, redis_url)
     notifier_proxy = NotifierProxy()
 
-    for klass in [HipChatNotifier, PagerdutyNotifier, TwilioNotifier]:
+    for klass in [HipChatNotifier, PagerdutyNotifier, TwilioNotifier, WebhookNotifier]:
         notifier = klass(STORAGE)
         if notifier.enabled:
             print 'Enabling {0}'.format(notifier._domain)
