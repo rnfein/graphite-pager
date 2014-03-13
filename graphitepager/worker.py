@@ -137,6 +137,7 @@ def run(args):
             records = retrieve_records(alert, notifier_proxy)
             mark_seen(alert, records, seen_alert_targets, notifier_proxy)
 
+        notifier_proxy.group_notify()
         sleep_secs(start_time)
 
 

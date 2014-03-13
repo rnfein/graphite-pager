@@ -14,6 +14,7 @@ class TestNotifierProxy(TestCase):
     def test_adding_notifier(self):
         args = range(5)
         notifier = MagicMock(PagerdutyNotifier)
+        notifier.group_notifications = False
         self.proxy.add_notifier(notifier)
 
         self.proxy.notify(*args)
@@ -24,6 +25,8 @@ class TestNotifierProxy(TestCase):
         args = range(5)
         notifier_1 = MagicMock(PagerdutyNotifier)
         notifier_2 = MagicMock(PagerdutyNotifier)
+        notifier_1.group_notifications = False
+        notifier_2.group_notifications = False
         self.proxy.add_notifier(notifier_1)
         self.proxy.add_notifier(notifier_2)
 
